@@ -7,14 +7,14 @@ from pymongo import MongoClient
 from time import sleep
 
 
-client = MongoClient()
+client = MongoClient(host=['192.168.1.198:27017'])
 
 db = client['bittrex']
 
 collections = db['marketSummaries']
 
-cursor = collections.find({"BaseVolume": {"$gt": .1}})
+cursor = collections.find({})
 
-for document in cursor: 
+for document in cursor:
     pprint(document)
     print '-----------------------------------------------------------------------------------------------------------------------------------------------'
