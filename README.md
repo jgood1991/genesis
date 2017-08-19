@@ -1,0 +1,2 @@
+# genesis
+Da Money Maker
