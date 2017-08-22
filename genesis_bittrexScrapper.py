@@ -12,7 +12,7 @@ db = client['bittrex']
 collections = db['marketSummaries']
 
 url = 'https://bittrex.com/api/v1.1/public/getmarketsummaries'
-counter = 1
+counter = 0
 while True:
 	response = requests.get(url)
 	json_data = json.loads(response.text)
