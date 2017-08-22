@@ -4,9 +4,6 @@ import json
 import requests
 from pprint import pprint
 from pymongo import MongoClient
-import pymongo
-from time import sleep
-
 
 client = MongoClient()
 
