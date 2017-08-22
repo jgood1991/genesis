@@ -7,7 +7,7 @@ from pprint import pprint
 from pymongo import MongoClient
 from time import sleep
 
-#Function that returns a list[ask, time, market] of the last NUMBER of samples for MARKET where the first element in the list is the latest data point and the last element in the list is the oldest datapoint. All elements in list are unique
+#Function that returns a list[last, time, market] of the last NUMBER of samples for MARKET where the first element in the list is the latest data point and the last element in the list is the oldest datapoint. All elements in list are unique
 def printLastNumbers( market , number):
 	myGraphList = []
 	cursor = collections.find({"MarketName": market }).sort("TimeStamp", -1)
@@ -15,7 +15,7 @@ def printLastNumbers( market , number):
 		#pprint(document['Ask'])
 		#pprint(document['TimeStamp'])
 		#pprint(document['MarketName'])
-		myGraphList.append([document['Ask'],document['TimeStamp'],document['MarketName']])
+		myGraphList.append([document['Last'],document['TimeStamp'],document['MarketName']])
 		#mySetTemp = set(myGraphList)
 		myGraphList = [list(t) for t in set(tuple(element) for element in myGraphList)]
 		#number = number - 1
@@ -38,7 +38,8 @@ def getMarkets():
 	while counterI < howLong - 1 :
 		counterI = counterI + 1
 		#pprint(responseList[counterI]['MarketName'])
-		myMarketList.append(responseList[counterI]['MarketName'])
+		if responseList[counterI]["BaseVolume"] > 1000:
+			myMarketList.append(responseList[counterI]['MarketName'])
 		#print "______________________________________________________________________________________________________________________________________________________"
 	return myMarketList
 
@@ -90,12 +91,25 @@ collections = db['marketSummaries']
 
 #pprint(printLastNumbers("BTC-OMG", 250))
 displayList = []
-for x in getMarkets():
-	masterList = normalizeTimeStamps(parseTimeStamps(printLastNumbers(x, 75)))
-	print str((  masterList[0][0] - masterList[len(masterList)-1][0]  ) / (  masterList[len(masterList)-1][1] ) ) + "_______" + masterList[0][2] + "______________" + str(masterList[len(masterList)-1][1])
-	displayList.append([(  masterList[0][0] - masterList[len(masterList)-1][0]  ) / (  masterList[len(masterList)-1][1] ), masterList[0][2]])
+loopList = range(500)
+loopList.pop(0)
+loopList.pop(0)
+#loopList.pop(0)
+#print loopList
+#for x in getMarkets():
+lenOfSamples = 10
+counter = 0
+masterList = normalizeTimeStamps(parseTimeStamps(printLastNumbers("BTC-ADX", lenOfSamples)))
+	#pprint(masterList)
+while counter < lenOfSamples - 1:
+	displayList.append([ ((masterList[counter][0] - masterList[counter + 1][0]) /  masterList[counter][0] ) * 100,  (masterList[counter + 1][1] - masterList[counter ][1]),  ((masterList[0][0] - masterList[counter + 1][0]) /  masterList[0][0] ) * 100, masterList[counter + 1][1], masterList[counter][2]])
+	counter = counter + 1
+	#print str((  masterList[0][0] - masterList[len(masterList)-1][0]  ) / (  masterList[len(masterList)-1][1] ) ) + "_______" + masterList[0][2] + "______________" + str(masterList[len(masterList)-1][1])
+	#displayList.append([(  masterList[0][0] - masterList[len(masterList)-1][0]  ) / (  masterList[len(masterList)-1][1] ), masterList[0][2], masterList[0][0] - masterList[len(masterList)-1][0] , masterList[len(masterList)-1][1] , ((masterList[0][0] - masterList[len(masterList)-1][0]) / masterList[0][0]) * 100  ] )
+	#displayList.append([ masterList[0][2],  (masterList[len(masterList)-1][1])/60 , ((masterList[0][0] - masterList[len(masterList)-1][0]) / masterList[0][0]) * 100  ] )
 
-displayList = sorted(displayList,key=lambda l:l[0], reverse=True)
+#displayList = sorted(displayList,key=lambda l:l[4], reverse=True)
+displayList = sorted(displayList,key=lambda l:l[3], reverse=False)
 pprint(displayList)
 	#pprint(printLastNumbers( x , 100))
 	#print "______________________________________________________________________________________________________________________________________________________"
