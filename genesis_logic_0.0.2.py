@@ -245,6 +245,7 @@ stateList = ["BTC_HKG", 0, 0 , 0]
 posDerivThreshold = 0
 negDerivThreshold = 0
 lcounter = 0
+myFile = open("orderbook.txt", "w")
 while True:
 	myderivList = getCurrentDerivative("BTC-HKG", 400)
 	myderiv = myderivList[0]
@@ -253,17 +254,22 @@ while True:
 	stateList[3] = myderiv
 	if stateList[1] == 0 and stateList[2] <= 0 and stateList[3] > posDerivThreshold:
 		print "BUYBUYBUYBUYBUYBUYBUYBUYBUY at the price of " + str(currentPriceForCoin)
+		myFile.write("BUYBUYBUYBUYBUYBUYBUYBUYBUY at the price of " + str(currentPriceForCoin))
 		stateList[1] = 1
 
 	if stateList[1] == 1 and stateList[2] >= 0 and stateList[3] < posDerivThreshold:
 		print "SELLSELLSELLSELLSELLSELLSELLSELL at the price of " + str(currentPriceForCoin)
+		myFile.write("SELLSELLSELLSELLSELLSELLSELLSELL at the price of " + str(currentPriceForCoin))
 		stateList[1] = 2
 
 	if stateList[1] == 2 and stateList[2] <= 0 and stateList[3] > posDerivThreshold:
 		print "BUYBUYBUYBUYBUYBUYBUYBUYBUY at the price of " + str(currentPriceForCoin)
+		myFile.write("BUYBUYBUYBUYBUYBUYBUYBUYBUY at the price of " + str(currentPriceForCoin))
 		stateList[1] = 1
 	lcounter = lcounter + 1
 	print lcounter
+
+myFile.close()
 
 
 
