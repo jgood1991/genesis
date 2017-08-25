@@ -141,16 +141,16 @@ def getCurrentDerivative(market, samples):
 	x_new = numpy.linspace(xcoords[0], xcoords[-1], 1000)
 	y_new = f(x_new)
 
-	plt.figure(0)
-	plt.plot(xcoords,ycoords)
-	plt.plot( x_new, y_new)
+	#plt.figure(0)
+	#plt.plot(xcoords,ycoords)
+	#plt.plot( x_new, y_new)
 	#plt.plot(x,y,'o', x_new, y_new)
-	plt.savefig('plot.png')
+	#plt.savefig('plot.png')
 
 	y_new = fprime(x_new)
-	plt.figure(1)
-	plt.plot( x_new, y_new)
-	plt.savefig('plotd.png')
+	#plt.figure(1)
+	#plt.plot( x_new, y_new)
+	#plt.savefig('plotd.png')
 	#print fprime(0)
 	return [fprime(0),mlist[0]]
 
