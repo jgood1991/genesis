@@ -156,8 +156,8 @@ def getCurrentDerivative(market, samples):
 
 
 #Establishing connection to MongoDB database
-client = MongoClient(host=['192.168.1.198:27017'])
-#client = MongoClient(host=['108.196.157.14:27017'])
+client = MongoClient(host=['192.168.1.198:52126'])
+#client = MongoClient(host=['199.249.230.22:52126'])
 
 db = client['bittrex']
 
