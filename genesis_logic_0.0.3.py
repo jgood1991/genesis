@@ -259,7 +259,7 @@ while True:
 		stateList[1] = 1
 		myFile.close()
 
-	if stateList[1] == 1 and stateList[2] >= 0 and stateList[3] < posDerivThreshold:
+	if stateList[1] == 1 and stateList[2] >= 0 and stateList[3] < negDerivThreshold:
 		print "SELLSELLSELLSELLSELLSELLSELLSELL at the price of " + str(currentPriceForCoin)
 		myFile.write("SELLSELLSELLSELLSELLSELLSELLSELL at the price of " + str(currentPriceForCoin) + "\n")
 		stateList[1] = 2
