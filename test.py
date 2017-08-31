@@ -3,8 +3,11 @@ import requests
 import numpy
 import json
 from collections import deque
+from pprint import pprint
 
-list = deque('00000', maxlen=5)
+myNewList = list()
+
+myList = deque('', maxlen=5)
 
 while True:
 
@@ -16,15 +19,24 @@ while True:
 	res = data["result"]
 	last = res["Last"]
 	
-	list.append(last)
+	myList.append(last)
 	
-	#x = numpy.array([20.0, 15.0, 10.0, 5.0, 0.0])
-	#y = numpy.array(list)
-	#z = numpy.polyfit(x, y, 3)
+	myNewList = list(myList)
+	
+	counter = 0
+	
+	if(counter > 4):
+		x = numpy.array([20.0, 15.0, 10.0, 5.0, 0.0])
+		y = numpy.array(myNewList)
+		z = numpy.polyfit(x, y, 3)
+	return(z)	
+	
+	counter = counter + 1
 	
 	print "Local current time :", localtime
 	
 	print(last)
-	print (list)
+	#print(myList)
+	print(myNewList)
 	
-	time.sleep(5)
+	time.sleep(1)
