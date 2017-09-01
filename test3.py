@@ -29,7 +29,7 @@ while counter < max_len:
 
 	localtime = time.asctime( time.localtime(time.time()) )
 
-	r = requests.get("https://bittrex.com/api/v1.1/public/getticker?market=BTC-ARK")
+	r = requests.get("https://bittrex.com/api/v1.1/public/getticker?market=BTC-OMG")
 
 	data = r.json()
 	res = data["result"]
@@ -54,11 +54,11 @@ while counter < max_len:
 states = [0,1,2]
 #the master state list 0 is market, 1 is the state, 2 is previous derivative, and 3 is current derivative
 stateList = ["BTC-NEO", 0, 0 , 0]
-posDerivThreshold = 0.0000002
-negDerivThreshold = -0.0000001
+posDerivThreshold = 0.000002
+negDerivThreshold = -0.000001
 lcounter = 0
 myFile = open("orderbook.txt", "w")
-bought_last = 0.0
+bought_last = 1.0
 percent_change = 0.0
 
 while True:
@@ -67,7 +67,7 @@ while True:
 
 	localtime = time.asctime( time.localtime(time.time()) )
 
-	r = requests.get("https://bittrex.com/api/v1.1/public/getticker?market=BTC-ARK")
+	r = requests.get("https://bittrex.com/api/v1.1/public/getticker?market=BTC-OMG")
 
 	data = r.json()
 	res = data["result"]
@@ -92,7 +92,7 @@ while True:
 		myFile.close()
 
 	#if stateList[1] == 1 and stateList[3] < negDerivThreshold:
-	if stateList[1] == 1 and stateList[3] < negDerivThreshold and last - bought_last > .0025 * bought_last + .0025 * last:
+	elif stateList[1] == 1 and stateList[3] < negDerivThreshold and last - bought_last > .0025 * bought_last + .0025 * last:
 		print "SELLSELLSELLSELLSELLSELLSELLSELL at the price of " + str(last)
 		myFile.write("SELLSELLSELLSELLSELLSELLSELLSELL at the price of " + str(last) + "\n")
 		stateList[1] = 2
@@ -103,7 +103,7 @@ while True:
 		stateList[1] = 2
 		myFile.close()
 
-	if stateList[1] == 2 and stateList[3] > posDerivThreshold:
+	elif stateList[1] == 2 and stateList[3] > posDerivThreshold:
 		print "BUYBUYBUYBUYBUYBUYBUYBUYBUY at the price of " + str(last)
 		myFile.write("BUYBUYBUYBUYBUYBUYBUYBUYBUY at the price of " + str(last) + "\n")
 		stateList[1] = 1
@@ -112,7 +112,7 @@ while True:
 	
 	print "Local current time :", localtime
 	
-	print "Currenct Price = " + str(last)
+	print "Current Price = " + str(last)
 	print "Bought at = " + str(bought_last)
 	percent_change = (last - bought_last) / bought_last * 100
 	print "Percent Change from Buy = " + str(percent_change)
