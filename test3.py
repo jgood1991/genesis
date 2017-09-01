@@ -9,7 +9,7 @@ time_period = 2
 
 myNewList = list()
 
-max_len = 30
+max_len = 60
 
 x_count = max_len
 
@@ -29,7 +29,7 @@ while counter < max_len:
 
 	localtime = time.asctime( time.localtime(time.time()) )
 
-	r = requests.get("https://bittrex.com/api/v1.1/public/getticker?market=BTC-NEO")
+	r = requests.get("https://bittrex.com/api/v1.1/public/getticker?market=BTC-ARK")
 
 	data = r.json()
 	res = data["result"]
@@ -59,6 +59,7 @@ negDerivThreshold = -0.0000001
 lcounter = 0
 myFile = open("orderbook.txt", "w")
 bought_last = 0.0
+percent_change = 0.0
 
 while True:
 
@@ -66,7 +67,7 @@ while True:
 
 	localtime = time.asctime( time.localtime(time.time()) )
 
-	r = requests.get("https://bittrex.com/api/v1.1/public/getticker?market=BTC-NEO")
+	r = requests.get("https://bittrex.com/api/v1.1/public/getticker?market=BTC-ARK")
 
 	data = r.json()
 	res = data["result"]
@@ -78,7 +79,7 @@ while True:
 	
 	x = numpy.array(x_list)
 	y = numpy.array(myNewList)
-	z = numpy.polyfit(x, y, 3)
+	z = numpy.polyfit(x, y, 10)
 	f = numpy.poly1d(z)
 	fprime = f.deriv(1)
 	
@@ -96,7 +97,7 @@ while True:
 		myFile.write("SELLSELLSELLSELLSELLSELLSELLSELL at the price of " + str(last) + "\n")
 		stateList[1] = 2
 		myFile.close()
-	elif stateList[1] == 1 and last <= bought_last * 0.985:
+	elif stateList[1] == 1 and last <= bought_last * 0.99:
 		print "SELLSELLSELLSELLSELLSELLSELLSELL at the price of " + str(last)
 		myFile.write("SELLSELLSELLSELLSELLSELLSELLSELL at the price of " + str(last) + "\n")
 		stateList[1] = 2
@@ -106,12 +107,15 @@ while True:
 		print "BUYBUYBUYBUYBUYBUYBUYBUYBUY at the price of " + str(last)
 		myFile.write("BUYBUYBUYBUYBUYBUYBUYBUYBUY at the price of " + str(last) + "\n")
 		stateList[1] = 1
+		bought_last = last
 		myFile.close()
 	
 	print "Local current time :", localtime
 	
-	print(last)
-	print "bought_last = " + str(bought_last)
+	print "Currenct Price = " + str(last)
+	print "Bought at = " + str(bought_last)
+	percent_change = (last - bought_last) / bought_last * 100
+	print "Percent Change from Buy = " + str(percent_change)
 	
 	print fprime(0)
 	
