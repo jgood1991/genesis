@@ -1,10 +1,14 @@
 #!/usr/bin/env python
 from bittrex import bittrex
+import os
+import subprocess
 
 #Get these from https://bittrex.com/Account/ManageApiKey
 api = bittrex('8318903750734cf0bac21716f6f1737b', '69b6ee5686504811b92ff6ece266c83f')
 
-while True:
+directory = "C:\Users\JustinNew"
+
+def executor():
 	#Market to buy/sell at from Anre's script
 	trade = 'BTC'
 	#currency will be replaced with BUY or SELL currency from Anre's script
@@ -41,3 +45,16 @@ while True:
 		#amount = api.getbalance(currency)
 		#print 'Selling {0} {1} for {2:.8f} {3}.'.format(amount, currency, currencyPrice, trade)
 		#api.sellmarket(market, amount)
+
+while True:
+	for filename in os.listdir(directory):
+		if filename.endswith(".txt"): 
+			#print filename
+			with open(filename) as file:
+				last_line = file.readlines()
+				print last_line
+			#line = subprocess.check_output(['tail', '-1', filename])
+			#print line
+			continue
+		else:
+			continue
